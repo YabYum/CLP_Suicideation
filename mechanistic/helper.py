@@ -66,3 +66,25 @@ def inference(size, decay1, decay2, likelihood, prior, obs):
     evidence = log_stable(prior)
     F = dkl - evidence
     return qs, F
+
+def perturbation(F_ext1, weight1, F_ext2, weight2, F_array, obs):
+    F = F_array[obs] + (weight1 * F_ext1) + (weight2 * F_ext2)
+    idx = (np.abs(F_array - F)).argmin()
+    return idx, F
+
+def step(likelihood, prior, obs, F_ext1, w1, F_ext2, w2):
+    qs, F = inference(likelihood, prior, obs)
+    qs2, F2 = perturbation(F_ext1, w1, F_ext2, w2, F, obs)
+    return qs, F, qs2, F2
+
+def collect(Fs, Fi, Fd):
+    Fp = w_sp * Fs + w_ip * Fi + w_dp * Fd
+    return Fp
+
+def impulse(v_rec, t_rec, s_rec, v, theta, dt, tau, el,i, t):
+    s = v > theta
+    v = s* el + (1-s) * (v - dt/ tau * ((v - el) - i))
+    v_rec = np.append(v_rec, v)
+    t_rec = np.append(t_rec, t)
+    s_rec = np.append(s_rec, s)
+    return s,v,v_rec,t_rec,s_rec
