@@ -60,7 +60,7 @@ def plot_belief(belief, title):
     plt.grid(True)
     plt.show()
 
-def inference(size, decay1, decay2, likelihood, prior, obs):
+def inference(likelihood, prior, obs):
     qs = infer_states(obs, likelihood, prior)
     dkl = kl_divergence(qs, likelihood[obs, :])
     evidence = log_stable(prior)
@@ -77,7 +77,7 @@ def step(likelihood, prior, obs, F_ext1, w1, F_ext2, w2):
     qs2, F2 = perturbation(F_ext1, w1, F_ext2, w2, F, obs)
     return qs, F, qs2, F2
 
-def collect(Fs, Fi, Fd):
+def collect(Fs, Fi, Fd, w_sp, w_ip, w_dp):
     Fp = w_sp * Fs + w_ip * Fi + w_dp * Fd
     return Fp
 

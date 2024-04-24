@@ -1,4 +1,3 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
 from helper import create_likelihood_matrix, get_prior, inference, collect, impulse, step
@@ -63,7 +62,7 @@ class Simulate:
             qss, Fs, qsss, Fss = step(likelihood_s, prior_s, self.obs_s, Fii, self.w_si, Fdd, self.w_sd)
             Fss_history.append(Fss)
             Fs_min_history.append(Fs.min())
-            qss_history.append(qsss)  # Assuming qsss is the updated posterior
+            qss_history.append(qsss)
 
             qsi, Fi, qsii, Fii = step(likelihood_i, prior_i, self.obs_i, Fss, self.w_si, Fdd, self.w_id)
             Fii_history.append(Fii)
@@ -145,12 +144,10 @@ class Interact:
     def plot(self, Fss_history, Fii_history, Fdd_history, Fp_history, Fs_min_history, Fi_min_history, Fd_min_history, v_rec, s_rec):
         Fi_min_history1 = [x + 0.6 for x in Fi_min_history]
         dt = 0.1
-
-        # Clear the previous figure if any
         if hasattr(self, 'canvas'):
             self.canvas.get_tk_widget().destroy()
 
-        fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(20, 4))
+        fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 3))
 
         ax1.plot(Fss_history, linestyle='-', color='black')
         ax1.plot(Fii_history, linestyle='-', color='green')
@@ -196,8 +193,3 @@ class Interact:
         sim = Simulate(size, decay, weight, priobs, intfire, T)
         Fss_history, Fii_history, Fdd_history, Fp_history, Fs_min_history, Fi_min_history, Fd_min_history, v_rec, s_rec = sim.run()
         self.plot(Fss_history, Fii_history, Fdd_history, Fp_history, Fs_min_history, Fi_min_history, Fd_min_history, v_rec, s_rec)
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = Interact(root)
-    root.mainloop()

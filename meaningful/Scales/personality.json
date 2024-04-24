@@ -1,0 +1,37 @@
+{
+    "Personality Trait Domain":[
+        {"domain1": "Negative affect"},
+        {"domain2": "Detachment"},
+        {"domain3": "Antagonism"},
+        {"domain4": "Disinhibition"},
+        {"domain5": "Psychoticism"}
+    ],
+
+    "Personality Trait Facet":[
+        {"facet1": "Anhedonia"},
+        {"facet2": "Anxiousness"},
+        {"facet3": "Attention Seeking"},
+        {"facet4": "Callousness"},
+        {"facet5": "Deceitfulness"},
+        {"facet6": "Depressivity"},
+        {"facet7": "Distractibility"},
+        {"facet8": "Eccentricity"},
+        {"facet9": "Emotional Liability"},
+        {"facet10": "Grandiosity"},
+        {"facet11": "Hostility"},
+        {"facet12": "Impulsivity"},
+        {"facet13": "Intimacy Avoidance"},
+        {"facet14": "Irresponsibility"},
+        {"facet15": "Manipulativeness"},
+        {"facet16": "Perceptual Dysregulation"},
+        {"facet17": "Perseveration"},
+        {"facet18": "Restricted Affectivity"},
+        {"facet19": "Rigid Perfectionism"},
+        {"facet20": "Risk Taking"},
+        {"facet21": "Separation Insecurity"},
+        {"facet22": "Submissiveness"},
+        {"facet23": "Suspiciousness"},
+        {"facet24": "Unusual Beliefs & Experiences"},
+        {"facet25": "Withdrawl"}
+    ]
+}
