@@ -88,3 +88,25 @@ def impulse(v_rec, t_rec, s_rec, v, theta, dt, tau, el,i, t):
     t_rec = np.append(t_rec, t)
     s_rec = np.append(s_rec, s)
     return s,v,v_rec,t_rec,s_rec
+
+def plot_sim(Fi_min_history,qss_history,qsi_history,qsd_history,Fss_history,Fii_history,Fdd_history,Fs_min_history,Fd_min_history):
+    Fi_min_history1 = [x + 0.6 for x in Fi_min_history]
+    qss_history1 = [x + 10 for x in qss_history]
+    qsi_history1 = [x + 10 for x in qsi_history]
+    qsd_history1 = [x + 10 for x in qsd_history]
+
+    plt.figure(figsize=(8, 4))
+
+    plt.plot(Fss_history, label='Symbolic', linestyle='-', color='black')
+    plt.plot(Fii_history, label='Imaginary', linestyle='-', color='green')
+    plt.plot(Fdd_history, label='Real', linestyle='-', color='gray')
+    plt.legend()
+    plt.plot(Fs_min_history, linestyle='--', color='black')
+    plt.plot(Fi_min_history1, linestyle='--', color='green')
+    plt.plot(Fd_min_history, linestyle='--', color='gray')
+    plt.plot(qss_history1, linestyle='-.', color='black')
+    plt.plot(qsi_history1, linestyle='-.', color='green')
+    plt.plot(qsd_history1, linestyle='-.', color='gray')
+
+    plt.xlabel('Time step')
+    plt.show()

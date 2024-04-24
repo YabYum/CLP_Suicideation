@@ -1,6 +1,7 @@
 import random
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.gridspec as gridspec
 
 def generate_digital(personality):
     facet_scores = {}
@@ -75,23 +76,19 @@ def create_likelihood_matrix(size, ambiguity):
 def log_stable(x, minval=1e-30):
     return np.log(np.maximum(x, minval))
 
-# Softmax function
 def softmax(x):
     e_x = np.exp(x - np.max(x))
     return e_x / e_x.sum(axis=0)
 
-# Get approximate posterior
 def infer_states(observation_index, likelihood_matrix, prior):
     log_likelihood = log_stable(likelihood_matrix[observation_index, :])
     log_prior = log_stable(prior)
     qs = softmax(log_likelihood + log_prior)
     return qs
 
-# KL divergence
 def kl_divergence(p, q):
     return (log_stable(p) - log_stable(q)).dot(p)
 
-# Construct prior
 def get_prior(prior_state, size, ambiguity):
     prior = np.zeros(size)
     for i in range(size):
@@ -100,7 +97,6 @@ def get_prior(prior_state, size, ambiguity):
     norm_prior = prior / prior.sum()
     return norm_prior
 
-# Visualization of likelihood
 def plot_likelihood(matrix):
     plt.figure(figsize=(5, 4))
     plt.imshow(matrix, cmap='viridis', interpolation='nearest')
@@ -110,7 +106,6 @@ def plot_likelihood(matrix):
     plt.ylabel('States')
     plt.show()
 
-# Visualization of priors / posterior
 def plot_belief(belief, title):
     plt.figure(figsize=(5, 2))
     plt.plot(belief, marker = None, linestyle='-', color='black')
@@ -147,3 +142,37 @@ def impulse(v_rec, t_rec, s_rec, v, theta, dt, tau, el,i, t):
     t_rec = np.append(t_rec, t)
     s_rec = np.append(s_rec, s)
     return s,v,v_rec,t_rec,s_rec
+
+def plot_sims(s_rec, v_rec, Fss_history, Fii_history, Fdd_history, Fp_history, Fs_min_history, Fi_min_history, Fd_min_history):
+    Fi_min_history1 = [x + 0.6 for x in Fi_min_history]
+    fig = plt.figure(figsize=(15, 4))
+    gs = gridspec.GridSpec(1, 3)  # 1 row, 3 columns
+
+    # First subplot
+    ax1 = plt.subplot(gs[2])
+    ax1.plot(s_rec, '.', markersize=20, color='red')
+    ax1.axis([0, 210, 0.8, 1.2])  # Adjust the x-axis limit appropriately
+    ax1.set_xticks([])
+    ax1.set_ylabel("Impulses")
+
+    # Second subplot
+    ax2 = plt.subplot(gs[1])
+    ax2.plot(v_rec, linestyle='-.')
+    ax2.set_xticks([])
+    ax2.set_ylabel("Accumulation")
+
+    # Third subplot
+    ax3 = plt.subplot(gs[0])
+    ax3.plot(Fss_history, linestyle='-', color='black')
+    ax3.plot(Fii_history, linestyle='-', color='green')
+    ax3.plot(Fdd_history, linestyle='-', color='gray')
+    ax3.plot(Fp_history, linestyle='-', color='red')
+    ax3.plot(Fs_min_history, linestyle='--', color='black')
+    ax3.plot(Fi_min_history1, linestyle='--', color='green')
+    ax3.plot(Fd_min_history, linestyle='--', color='gray')
+    ax3.legend()
+    ax3.set_ylabel('Free energy')
+
+    # Layout adjustment to prevent overlapping
+    plt.tight_layout()
+    plt.show()
