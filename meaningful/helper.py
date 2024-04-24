@@ -176,3 +176,69 @@ def plot_sims(s_rec, v_rec, Fss_history, Fii_history, Fdd_history, Fp_history, F
     # Layout adjustment to prevent overlapping
     plt.tight_layout()
     plt.show()
+
+def generation(threshold, tau, w_sd, w_si, w_sp, w_id, w_ip, w_dp, decays1, decays2, decayi1, decayi2, decayd1, decayd2, mismatchs, mismatchi, mismatchd):
+    sizes, sizei, sized = [50, 50, 50]
+    likelihood_s, likelihood_i, likelihood_d = create_likelihood_matrix(sizes, decays1), create_likelihood_matrix(sizei, decayi1), create_likelihood_matrix(sized, decayd1)
+    prior_s, prior_i, prior_d = get_prior(50, sizes, decays2), get_prior(50, sizei, decayi2), get_prior(50, sized, decayd2)
+    obs_s, obs_i, obs_d = [int(50-mismatchs),int(50-mismatchi), int(50-mismatchd)]
+    dt, el = 0.1, 0
+    Fss_history, Fii_history, Fdd_history, Fp_history = [], [], [], []
+    Fs_min_history, Fi_min_history, Fd_min_history = [], [], []
+    qss_history, qsi_history, qsd_history = [], [], []
+    v_rec, t_rec, s_rec = np.array([]), np.array([]), np.array([])
+
+    Fss_history, Fii_history, Fdd_history, Fp_history = [], [], [], []
+    Fs_min_history, Fi_min_history, Fd_min_history = [], [], []
+    qss_history, qsi_history, qsd_history = [], [], []
+    v_rec, t_rec, s_rec = np.array([]), np.array([]), np.array([])
+
+    qss, Fs = inference(likelihood_s, prior_s, obs_s)
+    Fss = Fs[obs_s]
+    Fss_history.append(Fss)
+    Fs_min = Fs[Fs.argmin()]
+    Fs_min_history.append(Fs_min)
+    qss_history.append(qss.argmax())
+
+    qsi, Fi = inference(likelihood_i, prior_i, obs_i)
+    qsi_history.append(qsi.argmax())
+    Fii = Fi[obs_i]
+    Fii_history.append(Fii)
+    Fi_min = Fi[Fi.argmin()]
+    Fi_min_history.append(Fi_min)
+
+    qsd, Fd = inference(likelihood_d, prior_d, obs_d)
+    qsd_history.append(qsd.argmax())
+    Fdd = Fd[obs_d]
+    Fdd_history.append(Fdd)
+    Fd_min = Fd[Fd.argmin()]
+    Fd_min_history.append(Fd_min)
+
+    Fp = collect(Fss, Fii, Fdd, w_sp, w_ip, w_dp)
+    Fp_history.append(Fp)
+
+    v = el
+    for t in range (int(1/dt)):
+        s, v, v_rec, t_rec, s_rec = impulse(v_rec, t_rec, s_rec, v, threshold, dt, tau, el, Fp, t)
+
+    for _ in range(20):
+        qss, Fs, qsss, Fss = step(likelihood_s, prior_s, obs_s, Fii, w_si, Fdd, w_sd)
+        Fss_history.append(Fss)
+        Fs_min_history.append(Fs.min())
+        qss_history.append(qsss)  # Assuming qsss is the updated posterior
+
+        qsi, Fi, qsii, Fii = step(likelihood_i, prior_i, obs_i, Fss, w_si, Fdd, w_id)
+        Fii_history.append(Fii)
+        Fi_min_history.append(Fi.min())
+        qsi_history.append(qsii)
+
+        qsd, Fd, qsdd, Fdd = step(likelihood_d, prior_d, obs_d, Fss, w_sd, Fii, w_id)
+        Fdd_history.append(Fdd)
+        Fd_min_history.append(Fd.min())
+        qsd_history.append(qsdd)
+        Fp = collect(Fss, Fii, Fdd, w_sp, w_ip, w_dp)
+        Fp_history.append(Fp)
+
+        for t in range (int(1/dt)):
+            s, v, v_rec, t_rec, s_rec = impulse(v_rec, t_rec, s_rec, v, threshold, dt, tau, el, Fp, t)
+    return s_rec, v_rec, Fss_history, Fii_history, Fdd_history, Fp_history, Fs_min_history, Fi_min_history, Fd_min_history
