@@ -34,14 +34,14 @@ def visualize_scale(scalescores, figsize, fontsize, title):
     plt.show()
 
 def model_params(pid):
-    threshold = (pid['Hostility'] / 3) * 50
-    tau = ((3 + pid['Restricted Affectivity'] - pid['Emotional Liability']) / 6) * 20
-    w_sp = w_ip = w_dp = (pid['Impulsivity'] + pid['Anhedonia'] - pid['Restricted Affectivity'] + 3) / 9
-    w_si = (pid['Attention Seeking'] + pid['Submissiveness']) / 6
-    decays1 = ((pid['Eccentricity'] + pid['Unusual Beliefs & Experiences']) / 6) * 5
-    decays2 = ((pid['Depressivity'] + pid['Submissiveness'] - pid['Grandiosity'] + 3 + pid['Anxiousness']) /12) * 5
-    decayi1 = ((pid['Perceptual Dysregulation'] + pid['Callousness']) / 6) * 5
-    decayi2 = ((6 - pid['Manipulativeness'] - pid['Rigid Perfectionism'] + pid['Intimacy Avoidance'] + pid['Separation Insecurity'] + pid['Withdrawl']) / 15) *5
+    threshold = (pid['Hostility'] / 5) * 50
+    tau = ((5 + pid['Restricted Affectivity'] - pid['Emotional Liability']) / 10) * 20
+    w_sp = w_ip = w_dp = (pid['Impulsivity'] + pid['Anhedonia'] - pid['Restricted Affectivity'] + 5) / 15
+    w_si = (pid['Attention Seeking'] + pid['Submissiveness']) / 10
+    decays1 = ((pid['Eccentricity'] + pid['Unusual Beliefs & Experiences']) / 10) * 5
+    decays2 = ((pid['Depressivity'] + pid['Submissiveness'] - pid['Grandiosity'] + 5 + pid['Anxiousness']) /20) * 5
+    decayi1 = ((pid['Perceptual Dysregulation'] + pid['Callousness']) / 10) * 5
+    decayi2 = ((10 - pid['Manipulativeness'] - pid['Rigid Perfectionism'] + pid['Intimacy Avoidance'] + pid['Separation Insecurity'] + pid['Withdrawl']) / 25) *5
     decayd1, decayd2 = 2, 1
     w_sd, w_id = [0.1, 0.2]
     return threshold, tau, w_sd, w_si, w_sp, w_id, w_ip, w_dp, decays1, decays2, decayi1, decayi2, decayd1, decayd2
@@ -180,8 +180,8 @@ def plot_sims(s_rec, v_rec, Fss_history, Fii_history, Fdd_history, Fp_history, F
 def generation(threshold, tau, w_sd, w_si, w_sp, w_id, w_ip, w_dp, decays1, decays2, decayi1, decayi2, decayd1, decayd2, mismatchs, mismatchi, mismatchd):
     sizes, sizei, sized = [50, 50, 50]
     likelihood_s, likelihood_i, likelihood_d = create_likelihood_matrix(sizes, decays1), create_likelihood_matrix(sizei, decayi1), create_likelihood_matrix(sized, decayd1)
-    prior_s, prior_i, prior_d = get_prior(50, sizes, decays2), get_prior(50, sizei, decayi2), get_prior(50, sized, decayd2)
-    obs_s, obs_i, obs_d = [int(50-mismatchs),int(50-mismatchi), int(50-mismatchd)]
+    prior_s, prior_i, prior_d = get_prior(49, sizes, decays2), get_prior(49, sizei, decayi2), get_prior(49, sized, decayd2)
+    obs_s, obs_i, obs_d = [int(49-mismatchs),int(49-mismatchi), int(49-mismatchd)]
     dt, el = 0.1, 0
     Fss_history, Fii_history, Fdd_history, Fp_history = [], [], [], []
     Fs_min_history, Fi_min_history, Fd_min_history = [], [], []
