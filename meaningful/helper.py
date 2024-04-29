@@ -23,8 +23,8 @@ def generate_event(life_events):
     return event_scores
 
 def visualize_scale(scalescores, figsize, fontsize, title):
-    facet_names = list(scalescores.keys())[::-1]  # Reverse the order of facet names
-    scores = list(scalescores.values())[::-1]  # Reverse the order of scores
+    facet_names = list(scalescores.keys())[::-1]
+    scores = list(scalescores.values())[::-1]
     plt.figure(figsize=figsize)
     plt.barh(facet_names, scores, color='skyblue')
     plt.xticks(fontsize=12); plt.yticks(fontsize=fontsize)  
@@ -146,22 +146,19 @@ def impulse(v_rec, t_rec, s_rec, v, theta, dt, tau, el,i, t):
 def plot_sims(s_rec, v_rec, Fss_history, Fii_history, Fdd_history, Fp_history, Fs_min_history, Fi_min_history, Fd_min_history):
     Fi_min_history1 = [x + 0.6 for x in Fi_min_history]
     fig = plt.figure(figsize=(15, 4))
-    gs = gridspec.GridSpec(1, 3)  # 1 row, 3 columns
+    gs = gridspec.GridSpec(1, 3)
 
-    # First subplot
     ax1 = plt.subplot(gs[2])
     ax1.plot(s_rec, '.', markersize=20, color='red')
-    ax1.axis([0, 210, 0.8, 1.2])  # Adjust the x-axis limit appropriately
+    ax1.axis([0, 210, 0.8, 1.2])
     ax1.set_xticks([])
     ax1.set_ylabel("Impulses")
 
-    # Second subplot
     ax2 = plt.subplot(gs[1])
     ax2.plot(v_rec, linestyle='-.')
     ax2.set_xticks([])
     ax2.set_ylabel("Accumulation")
 
-    # Third subplot
     ax3 = plt.subplot(gs[0])
     ax3.plot(Fss_history, linestyle='-', color='black')
     ax3.plot(Fii_history, linestyle='-', color='green')
@@ -173,7 +170,6 @@ def plot_sims(s_rec, v_rec, Fss_history, Fii_history, Fdd_history, Fp_history, F
     ax3.legend()
     ax3.set_ylabel('Free energy')
 
-    # Layout adjustment to prevent overlapping
     plt.tight_layout()
     plt.show()
 
@@ -225,8 +221,7 @@ def generation(threshold, tau, w_sd, w_si, w_sp, w_id, w_ip, w_dp, decays1, deca
         qss, Fs, qsss, Fss = step(likelihood_s, prior_s, obs_s, Fii, w_si, Fdd, w_sd)
         Fss_history.append(Fss)
         Fs_min_history.append(Fs.min())
-        qss_history.append(qsss)  # Assuming qsss is the updated posterior
-
+        qss_history.append(qsss)
         qsi, Fi, qsii, Fii = step(likelihood_i, prior_i, obs_i, Fss, w_si, Fdd, w_id)
         Fii_history.append(Fii)
         Fi_min_history.append(Fi.min())
