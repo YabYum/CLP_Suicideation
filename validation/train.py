@@ -339,8 +339,8 @@ def visualize_bear_ability(bear_ability, y):
 
     fig = plt.figure(figsize=(13,13))
     ax = fig.add_subplot(111, projection='3d') 
-    ax.scatter(x_red_jittered, y_red_jittered, z_red_jittered, c='red', s=15, alpha=0.7)
-    ax.scatter(x_black_jittered, y_black_jittered, z_black_jittered, c='black', s=15, alpha=0.7)
+    ax.scatter(x_red_jittered, y_red_jittered, z_red_jittered, c='red', s=20, alpha=0.7)
+    ax.scatter(x_black_jittered, y_black_jittered, z_black_jittered, c='black', s=20, alpha=0.7)
 
     ax.set_xlabel('Symbolic suicide', fontsize=11)
     ax.set_ylabel('Imaginary suicide', fontsize=11)
