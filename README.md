@@ -1,2 +1,4 @@
 # CLP_Suicideation
-a computational Lacanian psychoanalytic approach to suicide ideation
+A computational Lacanian psychoanalytic approach to suicide ideation
+
+For more information, please read our [PsyArXiv paper](https://osf.io/preprints/psyarxiv/eg6zn)
